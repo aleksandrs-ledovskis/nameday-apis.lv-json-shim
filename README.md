@@ -5,6 +5,9 @@ Reason - original API data source is not being updated anymore.
 
 ## Usage (A)
 
+Go to [Releases](https://github.com/aleksandrs-ledovskis/nameday-apis.lv-json-shim/releases) page and pick link of latest "namedays.json".
+
+Then use in place of `http://apis.lv/namedays.json` API call.
 
 ## Usage (B)
 

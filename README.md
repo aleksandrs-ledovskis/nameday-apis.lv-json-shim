@@ -1,7 +1,7 @@
 # APIs.lv namedays JSON shim
 
 This script uses [nameday-vvc-pdf-extractor](https://github.com/aleksandrs-ledovskis/nameday-vvc-pdf-extractor) gem to prepare [APIs.lv](http://apis.lv/) compatible namedays JSON extract.
-Reason - original API data source is not being updated anymore.
+Reason - ~~original API data source is not being updated anymore~~ new API key creation is not possible.
 
 ## Usage (A)
 

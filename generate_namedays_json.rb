@@ -1,27 +1,31 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require "nameday_vvc_pdf_extractor"
-require "psych"
+EMPTY_NAMEDAY_REGEXP = /\p{Pd}/.freeze
+NAMEDAY_SEPARATOR_REGEXP = /\p{Space}/.freeze
+COLUMN_MAP = { day: 'Datums', nameday: 'Vārdadienas' }.freeze
+DATE_FORMAT = '%d.%m'
 
-extractor = Nameday::VvcPdfExtractor.new
-extractor.read_pdf(ENV["VVC_PDF_FILE_PATH"])
-nameday_hash = extractor.extract
+require 'csv'
+require 'json'
 
 output = []
+csv_table = ::CSV.table(ENV['VVC_CSV_FILE_PATH'], col_sep: ';', header_converters: nil, encoding: 'BOM|UTF-8')
 
-nameday_hash.each do |month, month_value|
-  month_value.each do |day, day_value|
-    next unless day_value
+csv_table.each do |row|
+  nameday = row[COLUMN_MAP[:nameday]]
 
-    day_value.each do |name|
-      output << {
-        month: month,
-        day: day,
-        name: name
-      }
-    end
+  date_elements = ::Date._strptime(row[COLUMN_MAP[:day]], DATE_FORMAT)
+
+  nameday.split(NAMEDAY_SEPARATOR_REGEXP).each do |name|
+    next if nameday.match?(EMPTY_NAMEDAY_REGEXP) || nameday.empty?
+
+    output << {
+      month: date_elements[:mon],
+      day: date_elements[:mday],
+      name: name.strip
+    }
   end
 end
 
-puts Psych.to_json(output)
+puts ::JSON.dump(output)
